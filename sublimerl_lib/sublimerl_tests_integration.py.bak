@@ -30,7 +30,7 @@
 # imports
 import sublime
 import os, subprocess, re, threading, webbrowser
-from sublimerl_core import SUBLIMERL_VERSION, SUBLIMERL, SublimErlTextCommand, SublimErlProjectLoader
+from .sublimerl_core import SUBLIMERL_VERSION, SUBLIMERL, SublimErlTextCommand, SublimErlProjectLoader
 
 
 # test runner

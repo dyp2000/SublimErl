@@ -30,7 +30,7 @@
 # imports
 import sublime
 import os
-from sublimerl_core import SUBLIMERL, SublimErlTextCommand, SublimErlGlobal
+from .sublimerl_core import SUBLIMERL, SublimErlTextCommand, SublimErlGlobal
 
 
 # show man

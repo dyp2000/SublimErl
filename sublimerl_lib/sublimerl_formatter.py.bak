@@ -29,7 +29,7 @@
 
 # imports
 import sublime, sublime_plugin, os, tempfile
-from sublimerl_core import SUBLIMERL, SublimErlTextCommand, SublimErlProjectLoader
+from .sublimerl_core import SUBLIMERL, SublimErlTextCommand, SublimErlProjectLoader
 
 
 # main autoformat
