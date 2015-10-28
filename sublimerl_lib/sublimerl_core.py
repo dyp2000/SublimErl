@@ -104,8 +104,8 @@ def get_exe_path(name):
 
 def execute_os_command(os_cmd):
     # start proc
-    p = subprocess.Popen(
-        os_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, env=get_env())
+    p = subprocess.Popen(os_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    #, env=get_env()
     stdout, stderr = p.communicate()
     return (p.returncode, stdout.decode('utf8'))
 
@@ -165,22 +165,19 @@ def get_erl_path():
 
 def get_escript_path():
     settings = sublime.load_settings('SublimErl.sublime-settings')
-    escript_path = settings.get(
-        'escript_path', get_exe_path('escript'))
+    escript_path = settings.get('escript_path', get_exe_path('escript'))
     return escript_path
 
 
 def get_rebar_path():
     settings = sublime.load_settings('SublimErl.sublime-settings')
-    rebar_path = settings.get(
-        'rebar_path', get_exe_path('rebar'))
+    rebar_path = settings.get('rebar_path', get_exe_path('rebar'))
     return rebar_path
 
 
 def get_dialyzer_path():
     settings = sublime.load_settings('SublimErl.sublime-settings')
-    dialyzer_path = settings.get(
-        'dialyzer_path', get_exe_path('dialyzer'))
+    dialyzer_path = settings.get('dialyzer_path', get_exe_path('dialyzer'))
     return dialyzer_path
 
 
@@ -188,15 +185,13 @@ def get_erlang_libs_path():
     # run escript to get erlang lib path
     os.chdir(get_support_path())
     escript_command = "sublimerl_utility.erl lib_dir"
-    retcode, data = execute_os_command(
-        '%s %s' % (get_escript_path(), escript_command))
+    retcode, data = execute_os_command('%s %s' % (get_escript_path(), escript_command))
     return data
 
 
 def get_completion_skip_erlang_libs():
     settings = sublime.load_settings('SublimErl.sublime-settings')
-    return settings.get(
-        'completion_skip_erlang_libs', [])
+    return settings.get('completion_skip_erlang_libs', [])
 
 
 def get_env():
@@ -211,8 +206,7 @@ def get_env():
         bash_profile_path = os.path.join(
             os.getenv('HOME'), '.bash_profile')
         # get env paths
-        additional_paths = "%s:%s" % (readfiles_one_path_per_line(
-            etc_paths), readfiles_exported_paths([bash_profile_path]))
+        additional_paths = "%s:%s" % (readfiles_one_path_per_line(etc_paths), readfiles_exported_paths([bash_profile_path]))
         # add
         env['PATH'] = env['PATH'] + additional_paths
     return env
@@ -243,12 +237,10 @@ class SublimErlProjectLoader():
     def set_project_roots(self):
         # get project & file roots
         current_file_path = os.path.dirname(self.view.file_name())
-        project_root, file_test_root = self.find_project_roots(
-            current_file_path)
+        project_root, file_test_root = self.find_project_roots(current_file_path)
 
         if project_root == file_test_root == None:
-            self.project_root = self.test_root = os.path.abspath(
-                os.path.dirname(self.view.file_name()))
+            self.project_root = self.test_root = os.path.abspath(os.path.dirname(self.view.file_name()))
         else:
             self.project_root = os.path.abspath(project_root)
             self.test_root = os.path.abspath(file_test_root)
@@ -330,8 +322,7 @@ class SublimErlProjectLoader():
 
         # start proc
         current_env = self.get_test_env()
-        p = subprocess.Popen(os_cmd, stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE, shell=True, env=current_env)
+        p = subprocess.Popen(os_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, env=current_env)
         if block == True:
             stdout, stderr = p.communicate()
             return (p.returncode, stdout.decode('utf8'))

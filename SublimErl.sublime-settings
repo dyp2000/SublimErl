@@ -9,6 +9,11 @@
      * "dialyzer_path": "/usr/local/bin/dialyzer"
      */
 
+     "erl_path": "/usr/local/bin/erl",
+     "escript_path": "/usr/local/bin/escript",
+     "rebar_path": "/usr/local/bin/rebar",
+     "dialyzer_path": "/usr/local/bin/dialyzer",
+
      // Skip Erlang libs that match the regex
      "completion_skip_erlang_libs": [
          "^[cC]os[A-Z].+",

@@ -61,8 +61,7 @@ class SublimErlModuleNameCompletions():
         if plugin_path == None:
             return
         # load json
-        completions_full_path = os.path.join(
-            plugin_path, 'completion', 'Erlang-Libs.sublime-completions.full')
+        completions_full_path = os.path.join(plugin_path, 'completion', 'Erlang-Libs.sublime-completions.full')
         if os.path.exists(completions_full_path):
             f = open(completions_full_path)
             file_json = json.load(f)
@@ -80,8 +79,7 @@ class SublimErlModuleNameCompletions():
                     completions.append(m)
             # generate completion file
             file_json['completions'] = completions
-            f = open(os.path.join(plugin_path,
-                                  'completion', 'Erlang-Libs.sublime-completions'), 'w')
+            f = open(os.path.join(plugin_path, 'completion', 'Erlang-Libs.sublime-completions'), 'w')
             f.write(json.dumps(file_json))
             f.close()
 
@@ -175,11 +173,10 @@ class SublimErlCompletions(SublimErlProjectLoader):
 
             def run(self):
                 # get dirs
-                dest_file_base = os.path.join(
-                    get_completions_path(), "Erlang-Libs")
+                dest_file_base = os.path.join(get_completions_path(), "Erlang-Libs")
                 # get erlang libs info
                 erlang_libs_path = get_erlang_libs_path()
-                # current_erlang_libs = [name for name in os.listdir(erlang_libs_path) if os.path.isdir(os.path.join(erlang_libs_path, name))]
+                #current_erlang_libs = [name for name in os.listdir(erlang_libs_path) if os.path.isdir(os.path.join(erlang_libs_path, name))]
                 current_erlang_libs = '/usr/local/Cellar/erlang/18.1/lib/erlang/lib'
                 # read file of previous erlang libs
                 dirinfo_path = os.path.join(
