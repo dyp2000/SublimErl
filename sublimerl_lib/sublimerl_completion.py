@@ -179,8 +179,8 @@ class SublimErlCompletions(SublimErlProjectLoader):
                     get_completions_path(), "Erlang-Libs")
                 # get erlang libs info
                 erlang_libs_path = get_erlang_libs_path()
-                current_erlang_libs = [name for name in os.listdir(erlang_libs_path) if os.path.isdir(
-                    os.path.join(erlang_libs_path, name))]
+                # current_erlang_libs = [name for name in os.listdir(erlang_libs_path) if os.path.isdir(os.path.join(erlang_libs_path, name))]
+                current_erlang_libs = '/usr/local/Cellar/erlang/18.1/lib/erlang/lib'
                 # read file of previous erlang libs
                 dirinfo_path = os.path.join(
                     get_completions_path(), "Erlang-Libs.dirinfo")

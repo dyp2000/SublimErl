@@ -287,8 +287,7 @@ class SublimErlProjectLoader():
         f = open(app_file_path, 'rb')
         app_desc = f.read()
         f.close()
-        m = re.search(
-            r"{\s*application\s*,\s*('?[A-Za-z0-9_]+'?)\s*,\s*\[", app_desc)
+        m = re.search(r"{\s*application\s*,\s*('?[A-Za-z0-9_]+'?)\s*,\s*\[", app_desc.decode("utf-8"))
         if m:
             return m.group(1)
 
