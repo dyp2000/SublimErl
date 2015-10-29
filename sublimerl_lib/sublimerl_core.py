@@ -96,6 +96,7 @@ def get_erlang_module_name(view):
 
 
 def get_exe_path(name):
+    # print('name = %s' % name)
     retcode, data = execute_os_command('which %s' % name)
     data = data.strip()
     if retcode == 0 and len(data) > 0:
@@ -107,6 +108,7 @@ def execute_os_command(os_cmd):
     p = subprocess.Popen(os_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     #, env=get_env()
     stdout, stderr = p.communicate()
+    # print('stdout = %s' % stdout.decode('utf8'))
     return (p.returncode, stdout.decode('utf8'))
 
 
