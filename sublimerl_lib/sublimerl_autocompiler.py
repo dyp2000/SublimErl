@@ -51,8 +51,7 @@ class SublimErlAutocompiler(SublimErlProjectLoader):
             self.panel.end_edit(panel_edit)
             self.panel.show(self.panel.size())
             self.panel_buffer = ''
-            self.window.run_command(
-                "show_panel", {"panel": "output.%s" % self.panel_name})
+            self.window.run_command("show_panel", {"panel": "output.%s" % self.panel_name})
 
     def hide_panel(self):
         self.window.run_command("hide_panel")

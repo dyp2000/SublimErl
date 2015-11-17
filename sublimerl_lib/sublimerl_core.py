@@ -54,8 +54,7 @@ def readfiles_exported_paths(file_paths):
     concatenated_paths = []
     for file_path in file_paths:
         if os.path.exists(file_path):
-            p = subprocess.Popen(
-                ". %s; echo $PATH" % file_path, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            p = subprocess.Popen(". %s; echo $PATH" % file_path, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
             path, stderr = p.communicate()
             concatenated_paths.append(path.strip())
     return ''.join(concatenated_paths)

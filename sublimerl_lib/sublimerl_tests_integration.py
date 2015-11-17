@@ -34,6 +34,7 @@ import subprocess
 import re
 import threading
 import webbrowser
+from sublime import Edit as Edit
 from .sublimerl_core import *
 
 test_in_progress = False
@@ -70,10 +71,8 @@ class SublimErlTestRunner(SublimErlProjectLoader):
 
     def setup_panel(self):
         self.panel = self.window.get_output_panel(self.panel_name)
-        self.panel.settings().set("syntax", os.path.join(
-            get_plugin_path(), "theme", "SublimErlTests.hidden-tmLanguage"))
-        self.panel.settings().set("color_scheme", os.path.join(
-            get_plugin_path(), "theme", "SublimErlTests.hidden-tmTheme"))
+        self.panel.settings().set("syntax", os.path.join(get_plugin_path(), "theme", "SublimErlTests.hidden-tmLanguage"))
+        #self.panel.settings().set("color_scheme", os.path.join(get_plugin_path(), "theme", "SublimErlTests.hidden-tmTheme"))
 
     def update_panel(self):
         if len(self.panel_buffer):
@@ -82,8 +81,7 @@ class SublimErlTestRunner(SublimErlProjectLoader):
             self.panel.end_edit(panel_edit)
             self.panel.show(self.panel.size())
             self.panel_buffer = ''
-            self.window.run_command(
-                "show_panel", {"panel": "output.%s" % self.panel_name})
+            self.window.run_command("show_panel", {"panel": "output.%s" % self.panel_name})
 
     def log(self, text):
         self.panel_buffer += text
@@ -103,14 +101,12 @@ class SublimErlTestRunner(SublimErlProjectLoader):
 
         # check module name
         if self.erlang_module_name == None:
-            self.log_error(
-                "Cannot find a -module declaration: please add one to proceed.")
+            self.log_error("Cannot find a -module declaration: please add one to proceed.")
             return False
 
         # save project's root paths
         if self.project_root == None or self.test_root == None:
-            self.log_error(
-                "This code does not seem to be part of an OTP compilant project.")
+            self.log_error("This code does not seem to be part of an OTP compilant project.")
             return False
 
         # all ok
@@ -122,8 +118,7 @@ class SublimErlTestRunner(SublimErlProjectLoader):
         os_cmd = '%s eunit suites=sublimerl_unexisting_test' % get_rebar_path()
         if self.app_name:
             os_cmd += ' apps=%s' % self.app_name
-        retcode, data = self.execute_os_command(
-            os_cmd, dir_type='project', block=True, log=False)
+        retcode, data = self.execute_os_command(os_cmd, dir_type='project', block=True, log=False)
 
         if re.search(r"There were no tests to run", data) != None:
             # expected error returned (due to the hack)
@@ -188,8 +183,7 @@ class SublimErlDialyzerTestRunner(SublimErlTestRunner):
         # compile eunit
         self.compile_eunit_no_run()
         # run dialyzer
-        retcode, data = self.execute_os_command(
-            '%s -n .eunit/%s.beam' % (get_dialyzer_path(), module_tests_name), dir_type='test', block=False)
+        retcode, data = self.execute_os_command('%s -n .eunit/%s.beam' % (get_dialyzer_path(), module_tests_name), dir_type='test', block=False)
         # interpret
         self.interpret_test_results(retcode, data)
 
@@ -260,18 +254,15 @@ class SublimErlEunitTestRunner(SublimErlTestRunner):
     def eunit_test(self, module_name, module_tests_name, function_name):
         if function_name != None:
             # specific function provided, start single test
-            self.log("Running test \"%s:%s/0\" for target module \"%s.erl\".\n\n" %
-                     (module_tests_name, function_name, module_name))
+            self.log("Running test \"%s:%s/0\" for target module \"%s.erl\".\n\n" % (module_tests_name, function_name, module_name))
             # compile source code and run single test
             self.compile_eunit_run_suite(module_tests_name, function_name)
         else:
             # run all test functions in file
             if module_tests_name != module_name:
-                self.log("Running all tests in module \"%s.erl\" for target module \"%s.erl\".\n\n" % (
-                    module_tests_name, module_name))
+                self.log("Running all tests in module \"%s.erl\" for target module \"%s.erl\".\n\n" % (module_tests_name, module_name))
             else:
-                self.log(
-                    "Running all tests for target module \"%s.erl\".\n\n" % module_name)
+                self.log("Running all tests for target module \"%s.erl\".\n\n" % module_name)
             # compile all source code and test module
             self.compile_eunit_run_suite(module_tests_name)
 
@@ -285,8 +276,7 @@ class SublimErlEunitTestRunner(SublimErlTestRunner):
 
         os_cmd += ' skip_deps=true'
 
-        retcode, data = self.execute_os_command(
-            os_cmd, dir_type='project', block=False)
+        retcode, data = self.execute_os_command(os_cmd, dir_type='project', block=False)
         # interpret
         self.interpret_test_results(retcode, data)
 
@@ -362,16 +352,14 @@ class SublimErlCtTestRunner(SublimErlTestRunner):
         # get outputs
         if re.search(r"DONE.", data):
             # test passed
-            passed_count = re.search(
-                r"(\d+) ok, 0 failed(?:, 1 skipped)? of \d+ test cases", data).group(1)
+            passed_count = re.search(r"(\d+) ok, 0 failed(?:, 1 skipped)? of \d+ test cases", data).group(1)
             if int(passed_count) > 0:
                 self.log("=> %s TEST(S) PASSED.\n" % passed_count)
             else:
                 self.log("=> NO TESTS TO RUN.\n")
 
         elif re.search(r"ERROR: One or more tests failed", data):
-            failed_count = re.search(
-                r"\d+ ok, (\d+) failed(?:, 1 skipped)? of \d+ test cases", data).group(1)
+            failed_count = re.search(r"\d+ ok, (\d+) failed(?:, 1 skipped)? of \d+ test cases", data).group(1)
             self.log("\n=> %s TEST(S) FAILED.\n" % failed_count)
 
         else:
@@ -409,6 +397,7 @@ class SublimErlTestRunners():
 class SublimErlDialyzerCommand(SublimErlTextCommand):
 
     def run_command(self, edit):
+        print('run dialyzer')
         SublimErlTestRunners().dialyzer_test(self.view)
 
 
@@ -441,13 +430,11 @@ class SublimErlCtResultsCommand(SublimErlTextCommand):
     def run_command(self, edit):
         # open CT results
         loader = SublimErlProjectLoader(self.view)
-        index_path = os.path.abspath(
-            os.path.join(loader.project_root, 'logs', 'index.html'))
+        index_path = os.path.abspath(os.path.join(loader.project_root, 'logs', 'index.html'))
         if os.path.exists(index_path):
             webbrowser.open(index_path)
 
     def show_contextual_menu(self):
         loader = SublimErlProjectLoader(self.view)
-        index_path = os.path.abspath(
-            os.path.join(loader.project_root, 'logs', 'index.html'))
+        index_path = os.path.abspath(os.path.join(loader.project_root, 'logs', 'index.html'))
         return os.path.exists(index_path)
