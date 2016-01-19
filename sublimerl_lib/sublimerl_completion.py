@@ -147,8 +147,7 @@ class SublimErlCompletions(SublimErlProjectLoader):
                     completions = pickle.load(f)
                     f.close()
                     # set
-                    SUBLIMERL_COMPLETIONS[code_type][
-                        'completions'] = completions
+                    SUBLIMERL_COMPLETIONS[code_type]['completions'] = completions
 
                 # release lock
                 SUBLIMERL_COMPLETIONS[code_type]['load_in_progress'] = False
@@ -235,8 +234,7 @@ class SublimErlCompletions(SublimErlProjectLoader):
                 this.execute_os_command("python sublimerl_libparser.py %s %s" % (
                     this.shellquote(this.project_root), this.shellquote(dest_file_base)))
                 # release lock
-                SUBLIMERL_COMPLETIONS['current_project'][
-                    'rebuild_in_progress'] = False
+                SUBLIMERL_COMPLETIONS['current_project']['rebuild_in_progress'] = False
                 # trigger event to reload completions
                 this.load_current_project_completions()
                 this.status("Finished regenerating Project completions.")

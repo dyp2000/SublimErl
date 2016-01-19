@@ -7,7 +7,7 @@ from .sublimerl_function_search import SublimErlFunctionSearchCommand
 __all__ = ["SublimErlCompletionsListener",
            "SublimErlAutoFormatCommand",
            # "SublimErlAutocompilerListener",
-           "SublimErlDialyzerCommand", 
+           #"SublimErlDialyzerCommand", 
            # "SublimErlTestCommand", 
            "SublimErlRedoCommand", 
            "SublimErlCtResultsCommand",
